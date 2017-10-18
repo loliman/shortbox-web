@@ -1,0 +1,23 @@
+<div>
+    <div style="margin-bottom: 10px">
+        <img style="width: 450px" class="d-flex mr-3 img-thumbnail" *ngIf="value != ''" src="{{value}}"
+             alt="Cover image">
+        <img style="width: 450px" class="d-flex mr-3 img-thumbnail" *ngIf="value == ''"
+             src="../../../../../../assets/nocover.jpg" alt="Cover image">
+    </div>
+    <div>
+        <div class="col input-group text-nowrap text-right">
+            <input [class.visible]="edit" [class.invisible]="!edit" placeholder="Cover URL" id="coverurl"
+                   class="form-control" style="margin-left: -15px;margin-right: 15px;" [(ngModel)]="value"
+                   [disabled]="!edit">
+
+            <div *ngIf="!edit" class="btn"></div>
+            <button *ngIf="!edit" id="edit" (click)="toogle()" class="btn btn-sm btn-outline-info"><i
+                    class="material-icons">edit</i></button>
+            <button *ngIf="edit" id="ok" (click)="save()" class="btn btn-sm btn-outline-success"><i
+                    class="material-icons">done</i></button>
+            <button *ngIf="edit" id="cancel" (click)="reset()" class="btn btn-sm btn-outline-danger"><i
+                    class="material-icons">clear</i></button>
+        </div>
+    </div>
+</div>

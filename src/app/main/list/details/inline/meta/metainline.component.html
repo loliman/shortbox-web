@@ -1,0 +1,49 @@
+<div class="row form-group" *ngIf="isSeries()">
+    <div *ngIf="label" class="col-3">
+        <label>Serie</label>
+    </div>
+
+    <div class="col-3 col-auto input-group">
+        <input id="typeahead-basic" class="form-control" [(ngModel)]="workingValue.Title"
+               (selectItem)="selectSeries($event)" [ngbTypeahead]="searchSeries"
+               [resultFormatter]="seriesFormatter" [disabled]="!edit"/>
+    </div>
+
+    <div class="col-1 input-group" *ngIf="!edit">
+        <input class="form-control" [type]="text" value="{{romanize(workingValue.Volume)}}" [disabled]="!edit">
+    </div>
+
+    <div class="col-1 input-group" *ngIf="edit">
+        <input class="form-control" [type]="number" [(ngModel)]="workingValue.Volume" [disabled]="false">
+    </div>
+
+    <div class="col-2 input-group">
+        <input id="{{label}}" class="form-control" [type]="number" [(ngModel)]="workingValue.Startyear" [disabled]="!edit">
+    </div>
+
+    <div class="col text-nowrap">
+        <div class="btn"></div>
+        <div class="btn"></div>
+    </div>
+</div>
+
+<div class="row form-group">
+    <div *ngIf="label" class="col-3">
+        <label>Verlag</label>
+    </div>
+
+    <div [class.col-6]="label" [class.col-11]="!label" class="col-auto input-group">
+        <input class="form-control" [(ngModel)]="workingValue.Publisher.Name"
+               (selectItem)="selectPublisher($event)" [ngbTypeahead]="searchPublisher"
+               [resultFormatter]="publisherFormatter" [disabled]="!edit"/>
+    </div>
+
+    <div class="col text-nowrap" [class.noMargin]="!label">
+        <button *ngIf="!edit" id="edit" (click)="toogle()" class="btn btn-sm btn-outline-info"><i
+                class="material-icons">edit</i></button>
+        <button *ngIf="edit" id="ok" (click)="save()" class="btn btn-sm btn-outline-success"><i class="material-icons">done</i>
+        </button>
+        <button *ngIf="edit" id="cancel" (click)="reset()" class="btn btn-sm btn-outline-danger"><i
+                class="material-icons">clear</i></button>
+    </div>
+</div>

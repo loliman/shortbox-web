@@ -1,0 +1,32 @@
+<nav class="navbar-expand-lg navbar-light fixed-bottom" style="bottom: 10px">
+    <div class="collapse navbar-collapse justify-content-end" id="footer">
+        <button class="btn btn-light border-secondary navbar-brand" style="opacity: 0" (click)="easteregg(easter)"></button>
+        <button class="btn btn-light border-secondary navbar-brand material-icons" (click)="scrollToTop(true)">
+            keyboard_capslock
+        </button>
+        <button class="btn btn-light border-secondary navbar-brand material-icons" *ngIf="list.Type != 'meta'" (click)="download()">
+            cloud_download
+        </button>
+        <button *ngIf="renderAdd()" class="btn btn-light border-secondary navbar-brand material-icons"
+                (click)="createIssue(create)">add_circle
+        </button>
+    </div>
+</nav>
+
+<ng-template #create let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Comic hinzufügen</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <app-create (onAlert)="onAlert.emit($event)" [list]="list" (created)="onCreate($event);d('Cross click');"></app-create>
+    </div>
+</ng-template>
+
+<ng-template #easter let-c="close" let-d="dismiss">
+    <div class="modal-body">
+        <img width="100%" src="/assets/easter.jpg">
+    </div>
+</ng-template>

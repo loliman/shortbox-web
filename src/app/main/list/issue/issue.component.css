@@ -1,0 +1,78 @@
+.card-block {
+    padding: 0.5em;
+}
+
+.card {
+    margin-bottom: 5px;
+}
+
+.details {
+    box-shadow:none;
+}
+
+.details:hover, .details:active {
+    box-shadow: 0px 0px 25px 4px rgba(232,169,169,1);
+}
+
+.selected {
+    box-shadow: 0px 0px 25px 4px rgb(62, 232, 62);
+}
+
+.multi-selected {
+    box-shadow: 0px 0px 25px 4px rgb(232, 147, 26);
+}
+
+.card-img {
+    width: 100%;
+    min-height: calc(88.5% - 5%);
+}
+
+.float-left {
+    float: left;
+    margin-right: 5px;
+}
+
+.card-img-overlay {
+    padding: 1rem;
+}
+
+.cover-lg {
+    position: fixed;
+    width: 35%;
+    max-height: 90%;
+    left: 33%;
+    top: 4%;
+}
+
+.cover-container {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 1031;
+    position: fixed;
+    height:100%;
+    width:100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.dropdown-item {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.show {
+    display: block;
+}
+
+.reload {
+    padding-top: 20%;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 2000;
+    position: fixed;
+    height:100%;
+    width:100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}

@@ -1,0 +1,207 @@
+<div *ngIf="working" class="reload">
+    <div class="animation-container">
+        <div class="wrapper spacer-5">
+            <div class="blue ball"></div>
+            <div class="red ball"></div>
+            <div class="yellow ball"></div>
+            <div class="green ball"></div>
+        </div>
+        <div class="wrapper spacer-5">
+            <span *ngIf="currentWork && currentWork.Type == 'Delete'" style="color: white;">Lösche {{currentWork.Message}} ({{currentWork.Number}} von {{currentWork.Amount}})</span>
+            <span *ngIf="currentWork && currentWork.Type == 'Update'" style="color: white;">Aktualisiere {{currentWork.Message}} ({{currentWork.Number}} von {{currentWork.Amount}})</span>
+            <span *ngIf="currentWork && currentWork.Type == 'Addto'" style="color: white;">Verschiebe {{currentWork.Message}} ({{currentWork.Number}} von {{currentWork.Amount}})</span>
+            <span *ngIf="currentWork && currentWork.Type == ''" style="color: white;">Verarbeitung wird gestartet</span>
+            <div style="color: white;" class="letter first">.</div>
+            <div style="color: white;" class="letter second">.</div>
+            <div style="color: white;" class="letter third">.</div>
+        </div>
+    </div>
+</div>
+
+<nav *ngIf="selectedIssues.length != 0" class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="collapse navbar-collapse" id="header" style="width:100%;white-space: nowrap">
+        <div class="navbar-brand" style="width: 100%">
+            <span>{{selectedIssues.length}}</span>
+            <span *ngIf="selectedIssues.length > 1">Comics</span>
+            <span *ngIf="selectedIssues.length == 1">Comic</span>
+            <span>markiert</span>
+        </div>
+
+        <button *ngIf="selectedIssues.length > 1"
+                class="btn btn-outline-secondary material-icons"
+                (click)="openMultiEdit(edit)"
+                style="float: right">mode_edit
+        </button>
+
+        <button *ngIf="selectedIssues.length == 1" class="btn btn-outline-secondary material-icons"
+                (click)="openDetails(selectedIssues[0], $event)"
+                style="float: right">mode_edit
+        </button>
+
+        <div class="btn-sm" style="float: right;"></div>
+
+        <div class="dropdown" *ngIf="!list.Search.OrgIssue">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownBasic1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Hinzufügen zu <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu" style="width: 12rem; overflow: hidden" aria-labelledby="dropdownMenuButton">
+                <ng-container *ngFor="let l of lists">
+                    <li title="{{l.Name}}" (click)="addTo(l, i)" *ngIf="l.Id != -1 && l.Id != list.Id" class="btn-sm dropdown-item">
+                        {{l.Name}}
+                    </li>
+                </ng-container>
+            </div>
+        </div>
+
+        <div  class="btn-sm" style="float: right;"></div>
+
+        <button *ngIf="!list.Search.OrgIssue" class="btn btn-outline-secondary material-icons"
+                (click)="openDelete(delete, i)"
+                style="float: right">close
+        </button>
+
+        <div  class="btn-lg" style="float: right;"></div>
+        <div  class="btn-lg" style="float: right;"></div>
+
+        <button class="btn btn-outline-secondary material-icons"
+                (click)="resetMultiSelect()"
+                style="float: right">undo
+        </button>
+    </div>
+</nav>
+
+<ng-container *ngFor="let i of list.Objects; let idx = index">
+    <br *ngIf="i.Header && list.Search.GOne != 'i.title'">
+    <h5 *ngIf="i.Header && list.Search.GOne != 'i.title'" class="card-block">
+        <span>{{i.Header}} ({{i.Amount}}</span>
+        <span style="margin-left: -5px" *ngIf="list.Search.GOne.startsWith('s.')">/{{list.Objects[idx+1].Series.Issuecount}}</span>
+        <span *ngIf="i.Amount == 1">Comic</span>
+        <span *ngIf="i.Amount > 1">Comics</span>
+        <span style="margin-left: -5px">)</span>
+        <ng-container *ngFor="let p of i.Price; let idxp = index">
+            <span style="margin-left: 5px" *ngIf="!list.Search.OrgIssue" class="float-right">{{p.Price | currency:p.Currency:true:'1.2-2'}}</span>
+            <span *ngIf="idxp != i.Price.length-1 && !list.Search.OrgIssue" class="float-right">,</span>
+        </ng-container>
+    </h5>
+    <!-- a little hacky but we need it for the right idx of dropdown -->
+    <div *ngIf="i.Header" class="dropdown-menu" style="display: none"></div>
+
+    <!--
+        COVER VIEW
+    -->
+    <div *ngIf="!i.Header && list.Search.Cover"
+         [class.border-dark]="!i.Format.includes('Variant')"
+         [class.border-success]="i.Format.includes('Variant')"
+         [class.float-left]="list.Objects[idx+1] && !list.Objects[idx+1].Header"
+         [class.selected]="selectedIssue && i.Id == selectedIssue.Id && selectedIssues.length == 0"
+         [class.multi-selected]="selectedIssues.length != 0 && indexInSelectedIssues(i) != -1"
+         class="card details"
+         (mouseenter)="showCover(i.Coverurl, $event)"
+         (mouseleave)="hideCover()"
+         style="width: 13.8%; height: 48%; background: white;"
+         (click)="openDetails(i, $event)">
+
+        <img class="card-img" *ngIf="i.Coverurl != ''" src="{{i.Coverurl}}" alt="{{i.Title}}">
+        <img class="card-img" *ngIf="i.Coverurl == ''" src="../../../../assets/nocover.jpg" alt="Cover image">
+
+        <div class="card-img-overlay" style="height: 10%">
+            <div *ngIf="!list.Search.OrgIssue && lists && lists.length != 1" class="dropdown" style="float: right;">
+                <button [disabled]="selectedIssues.length != 0" class="btn btn-sm btn-light border-dark dropdown-toggle" type="button" (click)="showMoveToDropdown(idx)">
+                    Hinzufügen zu <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" style="overflow: hidden; width: 12rem;">
+                    <ng-container *ngFor="let l of lists">
+                        <li title="{{l.Name}}" (click)="move(l, i)" *ngIf="l.Id != -1 && l.Id != list.Id" class="btn-sm dropdown-item">
+                            {{l.Name}}
+                        </li>
+                    </ng-container>
+                </ul>
+            </div>
+            <button [disabled]="selectedIssues.length != 0" *ngIf="!list.Search.OrgIssue" class="btn btn-sm btn-light border-dark material-icons"
+                    (click)="openDelete(delete, i)">
+                close
+            </button>
+        </div>
+
+        <div class="card-block">
+            <div class="card-title" style="white-space: nowrap;">
+                <span title="{{i.Series.Title}} ({{romanize(i.Series.Volume)}})) ({{i.Series.Startyear}})" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;">
+                    {{getTitle(i)}}
+                </span>
+                <span>
+                    #{{i.Number}}
+                </span>
+                <span *ngIf="!list.Search.OrgIssue" style="float: right">
+                        {{i.Price.Price | currency:i.Price.Currency:true:'1.2-2'}}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!--
+        NORMAL VIEW
+    -->
+    <div *ngIf="!i.Header && !list.Search.Cover"
+         [class.bg-success]="i.Format.includes('Variant')"
+         [class.bg-primary]="!i.Format.includes('Variant')"
+         [class.selected]="selectedIssue && i.Id == selectedIssue.Id && selectedIssues.length == 0"
+         [class.multi-selected]="selectedIssues.length != 0 && indexInSelectedIssues(i) != -1"
+         class="card border-dark text-white details"
+         (mouseenter)="showCover(i.Coverurl, $event)"
+         (mouseleave)="hideCover()"
+         (click)="openDetails(i, $event)">
+        <div class="card-block container-fluid align-content-center" style="white-space: nowrap">
+            <span class="btn btn-sm" style="line-height: 1.5rem; font-size: 1rem">{{getTitle(i)}}</span>
+            <button [disabled]="selectedIssues.length != 0" *ngIf="!list.Search.OrgIssue" class="btn btn-sm btn-light border-dark material-icons"
+                    (click)="openDelete(delete, i)"
+                    style="float: right">close
+            </button>
+            <div *ngIf="!list.Search.OrgIssue" class="btn-sm" style="float: right;"></div>
+            <div *ngIf="!list.Search.OrgIssue && lists && lists.length != 1" class="dropdown" style="float: right;">
+                <button [disabled]="selectedIssues.length != 0" class="btn btn-sm btn-light border-dark dropdown-toggle" type="button" (click)="showMoveToDropdown(idx)">
+                    Hinzufügen zu <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" style="width: 12rem; overflow: hidden">
+                    <ng-container *ngFor="let l of lists">
+                        <li title="{{l.Name}}" (click)="addTo(l, i)" *ngIf="l.Id != -1 && l.Id != list.Id" class="btn-sm dropdown-item">
+                            {{l.Name}}
+                        </li>
+                    </ng-container>
+                </ul>
+            </div>
+            <div *ngIf="!list.Search.OrgIssue" class="btn-sm" style="float: right;"></div>
+            <span class="btn btn-sm" *ngIf="!list.Search.OrgIssue" style="float: right; line-height: 1.5rem; font-size: 1rem">
+                {{i.Price.Price | currency:i.Price.Currency:true:'1.2-2'}}
+            </span>
+        </div>
+    </div>
+</ng-container>
+
+<div *ngIf="zoomedCoverUrl && zoomedCoverUrl != ''" class="cover-container">
+    <img class="card cover-lg" src="{{zoomedCoverUrl}}">
+</div>
+
+<app-issue-details #details (onAlert)="onAlert.emit($event)" (reload)="onReload($event)"></app-issue-details>
+
+<ng-template #delete let-c="close">
+    <div class="modal-header">
+        <h4 class="modal-title">Wirklich löschen?</h4>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="deleteIssue(); c('Close click')">Ja</button>
+        <button type="button" class="btn btn-danger" (click)="c('Close click')">Nein</button>
+    </div>
+</ng-template>
+
+
+<ng-template #edit let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Comics bearbeiten</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <app-create [list]="list" [multiedit]="true" (created)="multiEdit($event);d('Cross click');"></app-create>
+    </div>
+</ng-template>

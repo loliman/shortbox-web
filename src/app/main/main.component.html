@@ -1,0 +1,61 @@
+<div id="alerts" *ngIf="alerts.length > 0" class="fixed-top">
+    <div id="alerts-container">
+        <div *ngFor="let alert of alerts" class="alert">
+            <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{ alert.message }}</ngb-alert>
+        </div>
+    </div>
+</div>
+
+<app-header [search]="list.Search" (onAlert)="onAlert($event)" (emitList)="setList($event)" (onIsLoading)="onIsLoading($event)"></app-header>
+
+<div class="search-results"
+     infiniteScroll
+     [infiniteScrollDistance]="2"
+     [infiniteScrollThrottle]="500"
+     (scrolled)="onScroll()"
+     [scrollWindow]="true" #scroll>
+
+    <div style="float: right;" *ngIf="list.Amount > 0">
+        {{list.Amount}}
+        <span *ngIf="list.Amount == 1">Eintrag</span>
+        <span *ngIf="list.Amount > 1">Einträge</span>
+        gefunden
+    </div>
+
+    <div class="wrapper" *ngIf="!list.Amount || list.Amount == 0">
+        Diese Liste ist leer.
+    </div>
+
+    <br>
+    <br>
+
+    <ng-container *ngIf="list.Type == 'issue'">
+        <app-issue-list [list]="list" (onAlert)="onAlert($event)" (reload)="reload($event)"></app-issue-list>
+    </ng-container>
+
+    <ng-container *ngIf="list.Type == 'meta'">
+        <app-meta-list [list]="list" (onAlert)="onAlert($event)" (reload)="reload($event)"></app-meta-list>
+    </ng-container>
+
+    <div *ngIf="isLoading">
+        <div class="wrapper spacer-5" style="zoom: 0.75; -moz-transform: scale(0.75);">
+            <div class="blue ball"></div>
+            <div class="red ball"></div>
+            <div class="yellow ball"></div>
+            <div class="green ball"></div>
+        </div>
+        <div class="wrapper spacer-5" style="margin-top: 25px">
+            Lade
+            <div class="letter first">.</div>
+            <div class="letter second">.</div>
+            <div class="letter third">.</div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+</div>
+
+<app-footer [list]="list" (onAlert)="onAlert($event)" (reload)="reload($event)"></app-footer>

@@ -1,0 +1,30 @@
+/* Hide input type=number spinner */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Hide dropdown arrow on diasble */
+select.disabled {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+}
+
+/* Remove margion with empty lable */
+.form-check-input {
+    position: absolute;
+    margin-top: 0.25rem;
+    margin-left: 0rem;
+}
+
+/* Hide native HTML5 datepicker */
+input::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+input[type="date"]::-webkit-input-placeholder {
+    visibility: hidden !important;
+}

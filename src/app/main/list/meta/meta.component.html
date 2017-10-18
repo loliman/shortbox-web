@@ -1,0 +1,17 @@
+<ng-container *ngFor="let o of list.Objects">
+    <h5 *ngIf="o.Header" class="card-block">
+        {{o.Header}}
+    </h5>
+
+    <div *ngIf="!o.Header"
+         class="card card-inverse bg-primary text-white details"
+         [class.selected]="selected && o.Id == selected.Id">
+        <div class="card-block" (click)="openDetails(o)">
+            <ng-container *ngIf="list.Id == 0">{{o.Title}} ({{romanize(o.Volume)}}) ({{o.Startyear}})
+                ({{o.Publisher.Name}})</ng-container>
+            <ng-container *ngIf="list.Id == 1">{{o.Name}}</ng-container>
+        </div>
+    </div>
+</ng-container>
+
+<app-meta-details #details [type]="list.Id" (onAlert)="onAlert.emit($event)" (reload)="onReload($event)"></app-meta-details>

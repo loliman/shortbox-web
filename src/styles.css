@@ -1,0 +1,113 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    background-image: url(/assets/crossword.png);
+}
+
+.material-icons {
+    font-size: 18px;
+}
+
+.modal-lg {
+    max-width: 98% !important;
+}
+
+.spacer-25 {
+    margin-top: 20%;
+}
+
+.spacer-5 {
+    margin-top: 5%;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ball {
+    width: 22px;
+    height: 22px;
+    border-radius: 11px;
+    display: inline-block;
+    margin: 0 10px;
+
+    animation: 1s bounce ease infinite;
+}
+
+.letter {
+    font-family: 'Roboto', sans-serif;
+    animation: 1s blink ease infinite;
+    margin: 0 3px;
+}
+
+.first {
+
+}
+
+.second {
+    animation-delay: .33s;
+}
+
+.third {
+    animation-delay: .66s;
+}
+
+.blue {
+    background-color: #4285F5;
+}
+
+.red {
+    background-color: #EA4436;
+    animation-delay: .25s;
+}
+
+.yellow {
+    background-color: #FBBD06;
+    animation-delay: .5s;
+}
+
+.green {
+    background-color: #34A952;
+    animation-delay: .75s;
+}
+
+@keyframes bounce {
+    50% {
+        transform: translateY(-25px);
+    }
+}
+
+@keyframes blink {
+    0% {
+        opacity: .2;
+    }
+    20% {
+        opacity: 1;
+    }
+    100% {
+        opacity: .2;
+    }
+}
+
+.dropdown-menu {
+    max-height: 250px;
+    width: 500px;
+    overflow: scroll;
+}
+
+.dropdown-menu-sm {
+    max-height: inherit !important;
+    width: auto !important;
+    overflow: auto !important;
+    min-width: 5rem !important;
+}
+
+.search-div {
+    margin-top: 3.5%;
+    z-index: 999 !important;
+    overflow: hidden !important;
+}

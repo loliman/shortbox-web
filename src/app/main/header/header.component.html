@@ -1,0 +1,237 @@
+<div *ngIf="importing" class="reload">
+    <div class="animation-container">
+        <div class="wrapper spacer-5">
+            <div class="blue ball"></div>
+            <div class="red ball"></div>
+            <div class="yellow ball"></div>
+            <div class="green ball"></div>
+        </div>
+        <div class="wrapper spacer-5">
+            <span *ngIf="currentImport && currentImport.Type == 'Issue'" style="color: white;">Importiere Ausgabe {{currentImport.Message}} ({{currentImport.Number}} von {{currentImport.Amount}})</span>
+            <span *ngIf="currentImport && currentImport.Type == 'Series'" style="color: white;">Importiere Serie {{currentImport.Message}} ({{currentImport.Number}} von {{currentImport.Amount}})</span>
+            <span *ngIf="!currentImport" style="color: white;">Importiere Daten. Dies kann einige Zeit in Anspruch nehmen</span>
+            <div style="color: white;" class="letter first">.</div>
+            <div style="color: white;" class="letter second">.</div>
+            <div style="color: white;" class="letter third">.</div>
+        </div>
+    </div>
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="collapse navbar-collapse" id="header">
+        <div class="navbar-brand">Shortbox</div>
+
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li *ngFor="let l of lists"
+                class="nav-link"
+                (click)="navigate(l)"
+                [class.active]="l.Id == list.Id && list.Type == 'issue' && combinedLists.length == 0"
+                [class.nav-link-ellipsed]="l.Id != list.Id || list.Type != 'issue' || combinedLists.length != 0"
+                title="{{l.Name}}">
+                {{l.Name}}
+            </li>
+
+            <li class="nav-link"
+                (click)="combine(combineModal)"
+                [class.active]="combinedLists.length != 0"
+                [class.nav-link-ellipsed]="combinedLists.length == 0"
+                title="Kombiniert">
+                Kombiniert
+            </li>
+        </ul>
+
+        <button class="btn btn-outline-secondary material-icons"
+                (click)="addListModal(addlist)"
+                style="margin-left: 15px">
+            add
+        </button>
+        <button *ngIf="renderEdit()"
+                class="btn btn-outline-secondary material-icons"
+                (click)="updateListModal(updatelist)"
+                style="margin-left: 5px">
+            mode_edit
+        </button>
+
+        <div class="btn"></div>
+
+        <form class="form-inline my-2 my-lg-0"
+              style=" margin-left: 5px">
+            <div class="input-group">
+                <input class="form-control mr-sm-2" placeholder="Schnellsuche" style="min-width: 175px"
+                       [ngbTypeahead]="quickSearch" [(ngModel)]="quickSearchTerm" [ngModelOptions]="{standalone: true}">
+                <button [disabled]="list.Type != 'issue'" class="input-group-addon"
+                        [style.color]="list.Type != 'issue' ? 'lightgray' : ''" style="margin-left: -8px;"
+                        (click)="extendedSearchClick(extendedsearch)">Erweitert
+                </button>
+            </div>
+        </form>
+
+        <button [class.btn-outline-primary]="list.Search.OrgIssue"
+                [class.btn-outline-secondary]="!list.Search.OrgIssue"
+                *ngIf="list.Type == 'issue'" class="btn btn-outline-secondary material-icons"
+                title="Wechsel zu Original Ausgaben"
+                (click)="switchToOrgIssueView()"
+                style="margin-left: 5px">
+            assignment
+        </button>
+
+        <button [class.btn-outline-primary]="list.Search.Cover"
+                [class.btn-outline-secondary]="!list.Search.Cover"
+                *ngIf="list.Type == 'issue'" class="btn btn-outline-secondary material-icons"
+                (click)="switchToCoverView()"
+                style="margin-left: 5px">
+            photo_size_select_actual
+        </button>
+
+        <div class="dropdown">
+            <button class="btn btn-menu material-icons" type="button" id="dropdownBasic1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                menu
+            </button>
+            <div class="dropdown-menu" style="margin-left: -120px;max-width: 150px;overflow: hidden;" aria-labelledby="dropdownMenuButton">
+                <button (click)="metaList(0)" class="btn-sm dropdown-item">
+                    Serien
+                </button>
+                <button (click)="metaList(1)" class="btn-sm dropdown-item">
+                    Verläge
+                </button>
+                <button (click)="import()" class="btn-sm dropdown-item">
+                    Importieren
+                </button>
+                <button (click)="logout()" class="btn-sm dropdown-item">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<ng-template #extendedsearch let-c="close">
+    <app-search [search]="search" (onSearch)="onSearch($event)"></app-search>
+</ng-template>
+
+<ng-template #combineModal let-c="close">
+    <div class="modal-header">
+        <h4 class="modal-title">Listen kombinieren</h4>
+    </div>
+    <div class="modal-body">
+        <div *ngFor="let l of lists">
+            <input id="combine_{{l.Id}}" [checked]="combinedLists.indexOf(l.Id) != -1" (change)="select(l.Id)" type="checkbox">
+            <label>{{l.Name}}</label>
+        </div>
+
+        <div class="btn-lg"></div>
+
+        <div>
+            <input [checked]="combinedLists.length == lists.length" (change)="selectAll()" type="checkbox">
+            <label>Alles auswählen</label>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="showCombinedLists(); c('Close click')">Kombinieren</button>
+        <button type="button" class="btn btn-danger" (click)="c('Close click')">Abbrechen</button>
+    </div>
+</ng-template>
+
+<ng-template #addlist let-c="close">
+    <div class="modal-header">
+        <h4 class="modal-title">Neue Liste erstellen</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row form-group">
+            <div class="col-3">
+                <label for="name">Name</label>
+            </div>
+
+            <div class="col-8">
+                <input id="name" class="form-control" [(ngModel)]="newList.Name">
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-3">
+                <label for="sort">Sortierung</label>
+            </div>
+
+            <div class="col-8">
+                <input id="sort" class="form-control" type="number" [(ngModel)]="newList.Sort">
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-3">
+                <label for="sort">Gruppierung</label>
+            </div>
+
+            <div class="col-8">
+                <select class="form-control" [(ngModel)]="newList.GroupBy">
+                    <option label="{{g[0]}}" *ngFor="let g of search.groupOne">{{g[1]}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="saveList(); c('Close click')">Speichern</button>
+        <button type="button" class="btn btn-danger" (click)="resetList(); c('Close click')">Abbrechen</button>
+    </div>
+</ng-template>
+
+<ng-template #updatelist let-c="close">
+    <div class="modal-header">
+        <h4 class="modal-title">Listendetails bearbeiten</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row form-group">
+            <div class="col-3">
+                <label for="name">Name</label>
+            </div>
+
+            <div class="col-8">
+                <input id="name" class="form-control" [(ngModel)]="list.Name">
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-3">
+                <label for="sort">Sortierung</label>
+            </div>
+
+            <div class="col-8">
+                <input id="sort" class="form-control" type="number" [(ngModel)]="list.Sort">
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-3">
+                <label for="sort">Gruppierung</label>
+            </div>
+
+            <div class="col-8">
+                <select class="form-control" [(ngModel)]="list.GroupBy">
+                    <option label="{{g[0]}}" *ngFor="let g of search.groupOne">{{g[1]}}</option>
+                </select>
+            </div>
+        </div>
+        <br>
+    </div>
+    <div class="modal-footer">
+        <button [disabled]="list.Amount != 0" class="btn btn-secondary navbar-brand material-icons"
+                (click)="deleteList(); c('Close click')">close
+        </button>
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Verschieben nach...
+            </button>
+            <ul class="dropdown-menu" style="width: 12rem; overflow: hidden">
+                <ng-container *ngFor="let l of lists">
+                    <li title="{{l.Name}}" (click)="moveList(l);c('Close click')" *ngIf="l.Id != -1 && l.Id != list.Id" class="btn-sm dropdown-item">
+                        {{l.Name}}
+                    </li>
+                </ng-container>
+            </ul>
+        </div>
+
+        <button type="button" class="btn btn-success" (click)="updateList(); c('Close click')">Speichern</button>
+        <button type="button" class="btn btn-danger" (click)="c('Close click')">Abbrechen</button>
+    </div>
+</ng-template>

@@ -1,0 +1,57 @@
+<div class="row form-group">
+    <div class="col-3" *ngIf="label != null">
+        <label for="{{label}}">{{label}}</label>
+    </div>
+
+    <div *ngIf="type == 'text'" class="col-6 col-auto input-group">
+        <span *ngIf="label == null && !edit">{{value}}</span>
+        <input *ngIf="label != null || edit" id="{{label}}" class="form-control" [(ngModel)]="value"
+               [disabled]="!edit">
+    </div>
+
+    <div *ngIf="type == 'number'" class="col-6 col-auto input-group">
+        <span *ngIf="label == null && !edit">{{value}}</span>
+        <input *ngIf="label != null || edit" id="{{label}}" class="form-control" type="number" [(ngModel)]="value"
+               [disabled]="!edit">
+    </div>
+
+    <div *ngIf="type == 'checkbox'" class="col-6 col-auto input-group">
+        <input id="{{label}}" (change)="save()" [checked]="value" class="form-check-input" *ngIf="!edit" [type]="type">
+    </div>
+
+    <div *ngIf="type == 'date'" class="col-6 col-auto input-group">
+        <input [disabled]="!edit" class="form-control" placeholder="yyyy-mm-dd" name="dp" value="value"
+               [(ngModel)]="datevalue" ngbDatepicker #d="ngbDatepicker" style="flex-direction: row;">
+        <div *ngIf="edit" class="input-group-addon" (click)="d.toggle()">
+            <i class="material-icons">today</i>
+        </div>
+    </div>
+
+    <div *ngIf="type == 'select'" class="col-6 col-auto input-group">
+        <input id="{{label}}" class="form-control" *ngIf="!edit" [type]="type" [(ngModel)]="value" disabled>
+        <select id="{{label}}" class="form-control" *ngIf="edit" [(ngModel)]="value">
+            <option *ngFor="let o of options" [value]="o">{{o}}</option>
+        </select>
+    </div>
+
+    <div class="col text-nowrap">
+        <button *ngIf="!edit && type != 'checkbox'" id="edit" (click)="toogle()" class="btn btn-sm btn-outline-info"><i
+                class="material-icons">edit</i></button>
+        <button *ngIf="edit" id="ok" (click)="save()" class="btn btn-sm btn-outline-success"><i class="material-icons">done</i>
+        </button>
+        <button *ngIf="edit" id="cancel" (click)="reset()" class="btn btn-sm btn-outline-danger"><i
+                class="material-icons">clear</i></button>
+    </div>
+</div>
+
+<div class="row form-group" *ngIf="type == 'series'">
+    <div class="col-3">
+        <label>Verlag</label>
+    </div>
+
+    <div class="col-6 col-auto input-group">
+        <input class="form-control" [(ngModel)]="value.Publisher.Name"
+               (selectItem)="selectPublisher($event)" [ngbTypeahead]="searchPublisher"
+               [resultFormatter]="publisherFormatter" [disabled]="!edit"/>
+    </div>
+</div>

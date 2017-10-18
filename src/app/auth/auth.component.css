@@ -1,0 +1,17 @@
+#alerts {
+    padding-top: 5px;
+    width: 100%;
+    z-index:1111;
+    background: transparent !important;
+}
+
+#alerts-container {
+    float: right;
+    width: 50%;
+    margin-right: -10px;
+}
+
+.alert {
+    margin-bottom: -2rem !important;
+    width: 100%;
+}

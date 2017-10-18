@@ -1,0 +1,300 @@
+<div *ngIf="importing">
+    <div class="wrapper spacer-5">
+        <div class="blue ball"></div>
+        <div class="red ball"></div>
+        <div class="yellow ball"></div>
+        <div class="green ball"></div>
+    </div>
+    <div class="wrapper spacer-5">
+        Importiere Comic
+        <div class="letter first">.</div>
+        <div class="letter second">.</div>
+        <div class="letter third">.</div>
+    </div>
+
+    <br>
+    <br>
+</div>
+
+<div *ngIf="!importing" class="container-fluid">
+    <div class="media justify-content-center">
+        <div class="media-body">
+            <div class="container-fluid">
+                <div class="row form-group">
+                    <div class="col-3">
+                        <label for="title">Titel</label>
+                    </div>
+                    <div class="col-6">
+                        <input class="form-control" id="title" [(ngModel)]="issue.Title" type="text"/>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-3">
+                        <label>Serie</label>
+                    </div>
+
+                    <div class="col-3 col-auto input-group">
+                        <input id="typeahead-basic" class="form-control" [(ngModel)]="issue.Series.Title"
+                               (selectItem)="selectSeries($event)" [ngbTypeahead]="searchSeries"
+                               [resultFormatter]="seriesFormatter"/>
+                    </div>
+
+                    <div class="col-1 input-group">
+                        <input class="form-control" [type]="number" [(ngModel)]="issue.Series.Volume">
+                    </div>
+
+                    <div class="col-2 input-group">
+                        <input class="form-control" [type]="number" [(ngModel)]="issue.Series.Startyear">
+                    </div>
+
+                    <div class="col text-nowrap">
+                        <div class="btn"></div>
+                        <div class="btn"></div>
+                    </div>
+                </div>
+
+                <div class="media-body">
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label for="publisher">Verlag</label>
+                        </div>
+                        <div class="col-6">
+                            <input id="publisher" class="form-control" [(ngModel)]="issue.Series.Publisher.Name"
+                                   (selectItem)="selectPublisher($event)" [ngbTypeahead]="searchPublisher"
+                                   [resultFormatter]="publisherFormatter"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="!multiedit" class="media-body">
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label for="number">Nummer</label>
+                        </div>
+                        <div class="col-6">
+                            <input id="number" class="form-control" [(ngModel)]="issue.Number"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media-body">
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label for="format">Format</label>
+                        </div>
+                        <div class="col-6">
+                            <select id="format" class="form-control" class="form-control" [(ngModel)]="issue.Format">
+                                <option *ngFor="let f of formats">{{f}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media-body">
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label for="language">Sprache</label>
+                        </div>
+                        <div class="col-6">
+                            <select id="language" class="form-control" class="form-control"
+                                    [(ngModel)]="issue.Language">
+                                <option *ngFor="let l of languages">{{l}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media-body">
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label for="pages">Seiten</label>
+                        </div>
+                        <div class="col-6">
+                            <input id="pages" class="form-control" [(ngModel)]="issue.Pages" type="number"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media-body">
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label for="releasedate">Datum</label>
+                        </div>
+                        <div class="col-6 input-group">
+                            <input id="releasedate" class="form-control" placeholder="yyyy-mm-dd" name="dp"
+                                   value="value"
+                                   [(ngModel)]="issue.Releasedate" ngbDatepicker #d="ngbDatepicker"
+                                   style="flex-direction: row;">
+                            <div class="input-group-addon" (click)="d.toggle()">
+                                <i class="material-icons">today</i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media-body">
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label for="price">Preis</label>
+                        </div>
+
+                        <div class="col-3 input-group">
+                            <input id="price" class="form-control" type="number" [(ngModel)]="issue.Price.Price">
+                        </div>
+
+                        <div class="col-3 input-group">
+                            <select id="currency" class="form-control" [(ngModel)]="issue.Price.Currency">
+                                <option *ngFor="let c of currencies" [value]="c">{{c}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media-body">
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label for="quality">Zustand</label>
+                        </div>
+                        <div class="col-6">
+                            <select id="quality" class="form-control" [(ngModel)]="issue.Quality">
+                                <option *ngFor="let q of qualities">{{q}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media-body">
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label for="quality_add">Zustand (Zusatz)</label>
+                        </div>
+                        <div class="col-6">
+                            <input id="quality_add" class="form-control" [(ngModel)]="issue.QualityAdditional"
+                                   type="text"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media-body">
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label for="amount">Anzahl</label>
+                        </div>
+                        <div class="col-6">
+                            <input id="amount" class="form-control" [(ngModel)]="issue.Amount" type="number"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media-body">
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label for="read">Gelesen</label>
+                        </div>
+                        <div class="col-6">
+                            <input id="read" type="checkbox" class="form-check-input" [(ngModel)]="issue.Read">
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="!multiedit" class="media-body">
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label for="originalissue">Original Ausgabe</label>
+                        </div>
+                        <div class="col-6">
+                            <input id="originalissue" type="checkbox" class="form-check-input"
+                                   [(ngModel)]="issue.Originalissue">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!multiedit">
+            <div style="margin-bottom: 10px">
+                <img style="width: 450px" class="d-flex mr-3 img-thumbnail" *ngIf="issue.Coverurl != ''"
+                     src="{{issue.Coverurl}}"
+                     alt="Cover image">
+                <img style="width: 450px" class="d-flex mr-3 img-thumbnail" *ngIf="issue.Coverurl == ''"
+                     src="../../../../assets/nocover.jpg" alt="Cover image">
+            </div>
+            <div>
+                <div class="col input-group text-nowrap text-right">
+                    <input id="coverurl" class="form-control" placeholder="Cover URL" style="margin-left: -15px;"
+                           type="text"
+                           [(ngModel)]="issue.Coverurl">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br *ngIf="!multiedit">
+
+    <div *ngIf="!multiedit" class="btn-group mr-2" role="group" aria-label="First group">
+        <button type="button" class="btn btn-secondary" disabled>Enthält ({{issue.Stories.length}})</button>
+    </div>
+    <div *ngIf="!multiedit" class="collapse show" id="stories">
+        <div class="card card-block" style="padding: 15px;">
+            <div class="row" *ngFor="let s of issue.Stories; let idx = index">
+                <div class="col-12 input-group">
+                    <div class="row form-group no-gutters" style="margin-bottom: 0;">
+                        <div class="col-4 input-group">
+                            <input class="form-control" [(ngModel)]="s.OriginalIssue.Series.Title"
+                                   (selectItem)="selectSeriesOriginalIssue($event, idx)" [ngbTypeahead]="searchSeries"
+                                   [resultFormatter]="seriesFormatter"
+                                   placeholder="Titel"/>
+                        </div>
+                        <div class="col col-1 input-group">
+                            <input placeholder="Volume" class="form-control" [type]="number" [(ngModel)]="s.OriginalIssue.Series.Volume">
+                        </div>
+                        <div class="col col-1 input-group">
+                            <input placeholder="Jahr" class="form-control" [type]="number" [(ngModel)]="s.OriginalIssue.Series.Startyear">
+                        </div>
+                        <div class="col col-2 input-group">
+                            <input placeholder="Nummer" class="form-control" [type]="text" [(ngModel)]="s.OriginalIssue.Number">
+                        </div>
+                        <div class="col col-1 input-group">
+                            <input placeholder="Story" class="form-control" [type]="number" [(ngModel)]="s.Number">
+                        </div>
+                        <div class="col col-2 input-group">
+                            <input placeholder="Weiteres" class="form-control" [type]="text" [(ngModel)]="s.AdditionalInfo">
+                        </div>
+                    </div>
+
+                    <span>&nbsp;</span>
+                    <button *ngIf="!edit" id="remove" (click)="remove(idx)" class="btn btn-sm btn-outline-danger"><i
+                            class="material-icons">remove</i></button>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-1" style="max-width: 90px">
+                    <button id="add" class="btn btn-sm btn-outline-success" (click)="addStory()"><i
+                            class="material-icons">add</i></button>
+                </div>
+                <div class="col-7">
+                    <input placeholder="Verlag" class="form-control" [(ngModel)]="storyPublisher.Name" [ngbTypeahead]="searchPublisher"
+                           (selectItem)="selectStoryPublisher($event)" [resultFormatter]="publisherFormatter"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="text-nowrap">
+        <div class="float-right">
+            <div class="btn-lg"></div>
+            <button id="save" (click)="save()" class="btn btn-success">Speichern</button>
+        </div>
+        <div *ngIf="!multiedit" class="input-group float-left" style="width: 75%; padding-top: 25px;">
+            <input class="form-control mr-sm-2" placeholder="Import-URL" [(ngModel)]="importUrl">
+            <button class="input-group-addon" (click)="import()" style="margin-left: -8px" type="text">Importieren
+            </button>
+        </div>
+    </div>
+</div>

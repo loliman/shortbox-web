@@ -1,0 +1,54 @@
+.btn-menu {
+    background: transparent;
+    font-size: 1.5rem;
+    padding-right: 0;
+    line-height: 1;
+    box-shadow: none !important;
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+.navbar {
+    border-bottom: groove;
+}
+
+.navbar-nav {
+    white-space:nowrap;
+    max-width: 45%;
+}
+
+.nav-link-ellipsed {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nav-link {
+    cursor: pointer;
+}
+
+.reload {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 2000;
+    position: fixed;
+    height:100%;
+    width:100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.animation-container {
+    position: fixed;
+    width: 50%;
+    left: 25%;
+    top: 40%;
+}
+
+.dropdown-item {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

@@ -1,0 +1,274 @@
+<div class="card card-block bg-faded" style="padding: 15px;">
+    <div class="row form-group">
+        <div class="col-2">
+            <h6>Suchen nach...</h6>
+        </div>
+    </div>
+
+    <div class="row form-group">
+        <label class="col-1 col-form-label" for="s_title">Titel</label>
+        <div class="col-2 input-group">
+            <input class="form-control" id="s_title" [(ngModel)]="search.Issue.Title"/>
+        </div>
+        <div class="col-1 input-group">
+            <select class="form-control" [(ngModel)]="search.STitle">
+                <option></option>
+                <option label="{{search.GREATER[0]}}">{{search.GREATER[1]}}</option>
+                <option label="{{search.GREATER_EQUAL[0]}}">{{search.GREATER_EQUAL[1]}}</option>
+                <option label="{{search.LESS[0]}}">{{search.LESS[1]}}</option>
+                <option label="{{search.LESS_EQUAL[0]}}">{{search.LESS_EQUAL[1]}}</option>
+                <option label="{{search.EQUALS[0]}}">{{search.EQUALS[1]}}</option>
+            </select>
+        </div>
+        <div class="col-1 input-group" style="margin-right: 60px;"> </div>
+        <label class="col-1 col-form-label" for="s_title">Datum</label>
+        <div class="col-1 input-group">
+            <input id="releasedate" class="form-control" placeholder="yyyy-mm-dd" name="dp"
+                   value="value"
+                   [(ngModel)]="date1" ngbDatepicker #d="ngbDatepicker"
+                   style="flex-direction: row;"
+                   (click)="d.toggle()">
+        </div>
+        <div class="col-1 input-group">
+            <select class="form-control" [(ngModel)]="search.SReleasedate">
+                <option label="{{search.GREATER[0]}}">{{search.GREATER[1]}}</option>
+                <option label="{{search.LESS[0]}}">{{search.LESS[1]}}</option>
+                <option label="{{search.EQUALS[0]}}">{{search.EQUALS[1]}}</option>
+                <option label="{{search.BETWEEN[0]}}">{{search.BETWEEN[1]}}</option>
+            </select>
+        </div>
+        <div class="col-1 input-group">
+            <input disabled="{{search.SReleasedate != search.BETWEEN[1]}}" id="releasedate1" class="form-control" placeholder="yyyy-mm-dd" name="dp"
+                   value="value"
+                   [(ngModel)]="date2" ngbDatepicker #d2="ngbDatepicker"
+                   style="flex-direction: row;"
+                   (click)="d2.toggle()">
+        </div>
+    </div>
+
+    <div class="row form-group">
+        <label class="col-1 col-form-label" for="s_title">Serie</label>
+        <div class="col-1 input-group">
+            <input id="typeahead-basic" class="form-control" [(ngModel)]="search.Issue.Series.Title"
+                   (selectItem)="selectSeries($event)" [ngbTypeahead]="searchSeries"
+                   [resultFormatter]="seriesFormatter"/>
+        </div>
+        <div class="col-1 col-auto input-group">
+            <input class="form-control" type="number" [(ngModel)]="search.Issue.Series.Startyear">
+        </div>
+        <div class="col-1 input-group">
+            <select class="form-control" [(ngModel)]="search.SSeries">
+                <option></option>
+                <option label="{{search.GREATER[0]}}">{{search.GREATER[1]}}</option>
+                <option label="{{search.GREATER_EQUAL[0]}}">{{search.GREATER_EQUAL[1]}}</option>
+                <option label="{{search.LESS[0]}}">{{search.LESS[1]}}</option>
+                <option label="{{search.LESS_EQUAL[0]}}">{{search.LESS_EQUAL[1]}}</option>
+                <option label="{{search.EQUALS[0]}}">{{search.EQUALS[1]}}</option>
+            </select>
+        </div>
+        <div class="col-1 input-group" style="margin-right: 60px;"> </div>
+        <label class="col-1 col-form-label" for="s_title">Nummer</label>
+        <div class="col-1 input-group">
+            <input class="form-control" [(ngModel)]="search.Issue.Number"/>
+        </div>
+        <div class="col-1 input-group">
+            <select class="form-control" [(ngModel)]="search.SNumber">
+                <option label="{{search.GREATER[0]}}">{{search.GREATER[1]}}</option>
+                <option label="{{search.LESS[0]}}">{{search.LESS[1]}}</option>
+                <option label="{{search.EQUALS[0]}}">{{search.EQUALS[1]}}</option>
+                <option label="{{search.BETWEEN[0]}}">{{search.BETWEEN[1]}}</option>
+            </select>
+        </div>
+        <div class="col-1 input-group">
+            <input disabled="{{search.SNumber != search.BETWEEN[1]}}" class="form-control" [(ngModel)]="search.Issue2.Number"/>
+        </div>
+    </div>
+
+    <div class="row form-group">
+        <label class="col-1 col-form-label" for="s_title">Verlag</label>
+        <div class="col-2 input-group">
+            <input class="form-control" [(ngModel)]="search.Issue.Series.Publisher.Name"
+                   (selectItem)="selectPublisher($event)" [ngbTypeahead]="searchPublisher"
+                   [resultFormatter]="publisherFormatter"/>
+        </div>
+        <div class="col-1 input-group">
+            <select class="form-control" [(ngModel)]="search.SPublisher">
+                <option></option>
+                <option label="{{search.GREATER[0]}}">{{search.GREATER[1]}}</option>
+                <option label="{{search.GREATER_EQUAL[0]}}">{{search.GREATER_EQUAL[1]}}</option>
+                <option label="{{search.LESS[0]}}">{{search.LESS[1]}}</option>
+                <option label="{{search.LESS_EQUAL[0]}}">{{search.LESS_EQUAL[1]}}</option>
+                <option label="{{search.EQUALS[0]}}">{{search.EQUALS[1]}}</option>
+            </select>
+        </div>
+        <div class="col-1 input-group" style="margin-right: 60px;"> </div>
+        <label class="col-1 col-form-label" for="s_title">Original</label>
+        <div class="col-1 input-group">
+            <select class="form-control" [(ngModel)]="search.SOriginalissue">
+                <option label="{{search.BOTH[0]}}">{{search.BOTH[1]}}</option>
+                <option label="{{search.YES[0]}}">{{search.YES[1]}}</option>
+                <option label="{{search.NO[0]}}">{{search.NO[1]}}</option>
+            </select>
+        </div>
+        <div class="col-4 input-group"></div>
+    </div>
+
+    <div class="row form-group">
+        <label class="col-1 col-form-label" for="s_title">Format</label>
+        <div class="col-3 input-group">
+            <select class="form-control" [(ngModel)]="search.Issue.Format">
+                <option></option>
+                <option *ngFor="let f of formats">{{f}}</option>
+                <option>Variant</option>
+            </select>
+        </div>
+        <div class="col-1 input-group" style="margin-right: 60px;"> </div>
+        <label class="col-1 col-form-label" for="s_title">Sprache</label>
+        <div class="col-3 input-group">
+            <select class="form-control" [(ngModel)]="search.Issue.Language">
+                <option></option>
+                <option *ngFor="let l of languages">{{l}}</option>
+            </select>
+        </div>
+        <div class="col-4 input-group"></div>
+    </div>
+
+    <div class="row form-group">
+        <label class="col-1 col-form-label" for="s_title">Seiten</label>
+        <div class="col-1 input-group">
+            <input type="number" class="form-control" [(ngModel)]="search.Issue.Pages"/>
+        </div>
+        <div class="col-1 input-group">
+            <select class="form-control" [(ngModel)]="search.SPages">
+                <option label="{{search.GREATER[0]}}">{{search.GREATER[1]}}</option>
+                <option label="{{search.LESS[0]}}">{{search.LESS[1]}}</option>
+                <option label="{{search.EQUALS[0]}}">{{search.EQUALS[1]}}</option>
+                <option label="{{search.BETWEEN[0]}}">{{search.BETWEEN[1]}}</option>
+            </select>
+        </div>
+        <div class="col-1 input-group">
+            <input disabled="{{search.SPages != search.BETWEEN[1]}}" type="number" class="form-control" [(ngModel)]="search.Issue2.Pages"/>
+        </div>
+        <div class="col-1 input-group" style="margin-right: 60px;"> </div>
+        <label class="col-1 col-form-label" for="s_title">Preis</label>
+        <div class="col-1 input-group">
+            <input type="number" class="form-control" [(ngModel)]="search.Issue.Price"/>
+        </div>
+        <div class="col-1 input-group">
+            <select class="form-control" [(ngModel)]="search.SPrice">
+                <option label="{{search.GREATER[0]}}">{{search.GREATER[1]}}</option>
+                <option label="{{search.LESS[0]}}">{{search.LESS[1]}}</option>
+                <option label="{{search.EQUALS[0]}}">{{search.EQUALS[1]}}</option>
+                <option label="{{search.BETWEEN[0]}}">{{search.BETWEEN[1]}}</option>
+            </select>
+        </div>
+        <div class="col-1 input-group">
+            <input disabled="{{search.SPrice != search.BETWEEN[1]}}" type="number" class="form-control" [(ngModel)]="search.Issue2.Price"/>
+        </div>
+    </div>
+
+    <div class="row form-group">
+        <label class="col-1 col-form-label" for="s_title">Zustand</label>
+        <div class="col-3 input-group">
+            <select class="form-control" [(ngModel)]="search.Issue.Quality">
+                <option></option>
+                <option *ngFor="let q of qualities">{{q}}</option>
+            </select>
+        </div>
+        <div class="col-1 input-group" style="margin-right: 60px;"> </div>
+        <label class="col-1 col-form-label" for="s_title">Anzahl</label>
+        <div class="col-1 input-group">
+            <input type="number" class="form-control" [(ngModel)]="search.Issue.Amount"/>
+        </div>
+        <div class="col-1 input-group">
+            <select class="form-control" [(ngModel)]="search.SAmount">
+                <option label="{{search.GREATER[0]}}">{{search.GREATER[1]}}</option>
+                <option label="{{search.LESS[0]}}">{{search.LESS[1]}}</option>
+                <option label="{{search.EQUALS[0]}}">{{search.EQUALS[1]}}</option>
+                <option label="{{search.BETWEEN[0]}}">{{search.BETWEEN[1]}}</option>
+            </select>
+        </div>
+        <div class="col-1 input-group">
+            <input disabled="{{search.SAmount != search.BETWEEN[1]}}" type="number" class="form-control" [(ngModel)]="search.Issue2.Amount"/>
+        </div>
+    </div>
+
+    <div class="row form-group">
+        <label class="col-1 col-form-label" for="s_title">Cover</label>
+        <div class="col-1 input-group">
+            <select class="form-control" [(ngModel)]="search.SCoverurl">
+                <option label="{{search.BOTH[0]}}">{{search.BOTH[1]}}</option>
+                <option label="{{search.YES[0]}}">{{search.YES[1]}}</option>
+                <option label="{{search.NO[0]}}">{{search.NO[1]}}</option>
+            </select>
+        </div>
+        <div class="col-3 col-form-label" style="margin-right: 60px;"></div>
+        <label class="col-1 col-form-label" for="s_title">Gelesen</label>
+        <div class="col-1 input-group">
+            <select class="form-control" [(ngModel)]="search.SRead">
+                <option label="{{search.BOTH[0]}}">{{search.BOTH[1]}}</option>
+                <option label="{{search.YES[0]}}">{{search.YES[1]}}</option>
+                <option label="{{search.NO[0]}}">{{search.NO[1]}}</option>
+            </select>
+        </div>
+        <div class="col-4 input-group"></div>
+    </div>
+
+    <div class="row form-group">
+        <label class="col-1 col-form-label" for="s_title">Doppelt</label>
+        <div class="col-1 input-group">
+            <select class="form-control" [(ngModel)]="search.SDuplicateIn">
+                <option label="{{search.BOTH[0]}}">{{search.BOTH[1]}}</option>
+                <option label="{{search.YES[0]}}">{{search.YES[1]}}</option>
+                <option label="{{search.NO[0]}}">{{search.NO[1]}}</option>
+                <option label="{{search.COMPLETE[0]}}">{{search.COMPLETE[1]}}</option>
+            </select>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row form-group">
+        <div class="col-2">
+            <h6>Gruppieren nach...</h6>
+        </div>
+    </div>
+
+    <div class="row form-group">
+        <label class="col-1 col-form-label" for="s_title">Erst</label>
+        <div class="col-2 input-group">
+            <select class="form-control" [(ngModel)]="search.GOne">
+                <option label="{{g[0]}}" *ngFor="let g of search.groupOne">{{g[1]}}</option>
+            </select>
+        </div>
+        <div class="col-1 input-group">
+            <select class="form-control" [(ngModel)]="search.GOneDir">
+                <option label="{{g[0]}}" *ngFor="let g of search.groupDir">{{g[1]}}</option>
+            </select>
+        </div>
+        <div class="col-1" style="margin-right: 60px;"></div>
+
+        <label class="col-1 col-form-label" for="s_title">Dann</label>
+        <div class="col-2 input-group">
+            <select class="form-control" [(ngModel)]="search.GTwo">
+                <option></option>
+                <option label="{{g[0]}}" *ngFor="let g of search.groupTwo">{{g[1]}}</option>
+            </select>
+        </div>
+        <div class="col-1 input-group">
+            <select class="form-control" [(ngModel)]="search.GTwoDir">
+                <option></option>
+                <option label="{{g[0]}}" *ngFor="let g of search.groupDir">{{g[1]}}</option>
+            </select>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row justify-content-end">
+        <button class="btn btn-sm btn-primary border-dark" (click)="reset()">Zurücksetzen</button>
+        <div class="btn-sm"></div>
+        <button class="btn btn-sm btn-primary border-dark" (click)="searchClick()">Suchen</button>
+        <div class="btn-sm"></div>
+    </div>
+</div>

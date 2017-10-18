@@ -1,0 +1,29 @@
+<ng-template #details let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">
+            <ng-container *ngIf="type == 0">{{series.Title}} ({{series.Startyear}}) ({{series.Publisher.Name}})
+            </ng-container>
+            <ng-container *ngIf="type == 1">{{series.Publisher.Name}}</ng-container>
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="reset();d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="media justify-content-center">
+                <div class="media-body">
+                    <app-metainline [value]="series"
+                                    (updated)="series = $event; update()"
+                                    type="series"></app-metainline>
+
+                    <app-inline *ngIf="isSeries()" [value]="series.Endyear" [label]="'Ende'" (updated)="series.Endyear = $event; update()"
+                                type="number"></app-inline>
+
+                    <app-inline *ngIf="isSeries()" [value]="series.Issuecount" [label]="'Anzahl Ausgaben'" (updated)="series.Issuecount = $event; update()"
+                                type="number"></app-inline>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

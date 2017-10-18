@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col-12 input-group">
+        <button [class.btn-outline-info]="story.Issues == null || story.Issues.length == 1"
+                [class.btn-outline-danger]="story.Issues != null && story.Issues.length > 1" [disabled]="edit" id="details" (click)="details()"
+                class="btn btn-sm"><i class="material-icons">search</i></button>
+        <span>&nbsp;</span>
+
+        <div class="row form-group no-gutters" style="margin-bottom: 0;">
+            <div class="col-4 input-group">
+                <input id="typeahead-basic" class="form-control" [(ngModel)]="story.OriginalIssue.Series.Title"
+                       (selectItem)="selectSeries($event)" [ngbTypeahead]="searchSeries"
+                       [resultFormatter]="seriesFormatter" [disabled]="!edit"
+                       placeholder="Titel"/>
+            </div>
+
+            <div class="col col-1 input-group" *ngIf="!edit">
+                <input placeholder="Volume" class="form-control" value="{{romanize(story.OriginalIssue.Series.Volume)}}" [disabled]="!edit">
+            </div>
+            <div class="col col-1 input-group" *ngIf="edit">
+                <input placeholder="Volume" class="form-control" type="number" [(ngModel)]="story.OriginalIssue.Series.Volume" [disabled]="false">
+            </div>
+
+            <div class="col col-1 input-group">
+                <input placeholder="Jahr" class="form-control" type="number" [(ngModel)]="story.OriginalIssue.Series.Startyear" [disabled]="!edit">
+            </div>
+            <div class="col col-2 input-group">
+                <input placeholder="Nummer" class="form-control" [(ngModel)]="story.OriginalIssue.Number" [disabled]="!edit">
+            </div>
+
+            <div class="col col-1 input-group" *ngIf="!edit">
+                <input placeholder="Story" class="form-control" value="{{romanize(story.Number)}}" [disabled]="!edit">
+            </div>
+            <div class="col col-1 input-group" *ngIf="edit">
+                <input placeholder="Story" class="form-control" type="number" [(ngModel)]="story.Number" [disabled]="false">
+            </div>
+
+            <div class="col col-2 input-group">
+                <input placeholder="Weiteres" class="form-control" [(ngModel)]="story.AdditionalInfo" [disabled]="!edit">
+            </div>
+        </div>
+
+        <span>&nbsp;</span>
+        <button *ngIf="!edit" id="edit" (click)="toogle()" class="btn btn-sm btn-outline-info"><i
+                class="material-icons">edit</i></button>
+        <button *ngIf="edit" id="ok" (click)="save()" class="btn btn-sm btn-outline-success"><i class="material-icons">done</i>
+        </button>
+        <span>&nbsp;</span>
+        <button *ngIf="!edit" id="remove" (click)="remove()" class="btn btn-sm btn-outline-danger"><i
+                class="material-icons">remove</i></button>
+        <button *ngIf="edit" id="cancel" (click)="reset()" class="btn btn-sm btn-outline-danger"><i
+                class="material-icons">clear</i></button>
+    </div>
+</div>

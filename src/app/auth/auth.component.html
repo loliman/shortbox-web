@@ -1,0 +1,21 @@
+<div id="alerts" *ngIf="alerts.length > 0" class="fixed-top">
+    <div id="alerts-container">
+        <div *ngFor="let alert of alerts" class="alert">
+            <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{ alert.message }}</ngb-alert>
+        </div>
+    </div>
+</div>
+
+<div class="card text-center card-outline-secondary" style="left: 25%; margin-top: 15%; max-width: 50%; padding: 15px;">
+    <div class="card-block">
+        <h2 class="card-title">Shortbox</h2>
+        <h6 class="card-subtitle mb-2 text-muted">Your personal Graphic Novel Management Tool</h6>
+        <br>
+        <input class="form-control" style="margin-left: 25%; max-width: 50%" name="user" placeholder="Username"
+               [(ngModel)]="user.Name">
+        <input class="form-control" style="margin-top:5px; margin-left: 25%; max-width: 50%" type="password" name="pass"
+               placeholder="Passwort" [(ngModel)]="user.Password">
+        <br>
+        <button class="btn btn-primary" name="login" (click)="login()">Login</button>
+    </div>
+</div>
