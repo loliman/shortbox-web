@@ -5,5 +5,7 @@ echo '--------------------------'
 rm -rf ./dist/*
 npm install
 ng build --env=prod
-tar -cf ./dist/shortbox_web.tar ./dist/*
+cd dist 
+tar -cf shortbox_web.tar * 
+cd ..
 echo 'Build done!'
