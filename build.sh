@@ -3,6 +3,7 @@ echo '--------------------------'
 echo ' Building shortbox-web... '
 echo '--------------------------'
 rm -rf ./dist/*
+git pull
 npm install
 ng build --env=prod
 cd dist 
