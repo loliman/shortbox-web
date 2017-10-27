@@ -147,10 +147,6 @@ export class ListComponent implements OnInit {
             this.currentWork = new Message();
 
             for (let i = 0; i < this.selectedIssues.length; i++) {
-                if (list.Id === 0 && this.selectedIssues[i].Amount === 0) {
-                    this.selectedIssues[i].Amount = 1;
-                }
-
                 if(this.selectedIssues[i].Lists == null || isUndefined(this.selectedIssues[i].Lists)) {
                     this.selectedIssues[i].Lists = [];
                 }
@@ -187,10 +183,6 @@ export class ListComponent implements OnInit {
                 response => {
                     // indicator for movement
                     list.Search.Offset = -1;
-
-                    if (list.Id === 0 && response.Payload.Amount === 0) {
-                        issue.Amount = 1;
-                    }
 
                     response.Payload.Lists.push(list);
 

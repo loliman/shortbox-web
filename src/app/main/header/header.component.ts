@@ -67,6 +67,8 @@ export class HeaderComponent implements OnInit, OnChanges {
 
         this.listService.getLists().subscribe(
             response => {
+                console.log(response);
+
                 if (response.Type === "success") {
                     this.lists = response.Payload;
 
@@ -78,7 +80,11 @@ export class HeaderComponent implements OnInit, OnChanges {
                         .params
                         .subscribe(params => {
                             if (params['id'] === null || isUndefined(params['id'])) {
-                                ids.push(0);
+                                if(this.lists.length == 0) {
+                                    ids.push(0);
+                                } else {
+                                    ids.push(this.lists[0].Id);
+                                }
                             } else if (params['id'].indexOf(',') === -1) {
                                 ids.push(+params['id'] || 0);
                             } else {
@@ -164,6 +170,13 @@ export class HeaderComponent implements OnInit, OnChanges {
         this.list.Search.Lists.push(list.Id);
         this.quickSearchTerm = '';
         this.combinedLists = [];
+    }
+
+    navigateToArchive() {
+        let archive = new List();
+        archive.Id = 0;
+        archive.Type = "issue";
+        this.navigate(archive);
     }
 
     loadList(list: List) {
