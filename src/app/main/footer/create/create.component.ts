@@ -186,10 +186,7 @@ export class CreateComponent implements OnInit {
                 this.issue.Stories[i].OriginalIssue.Price.Currency = 'USD';
             }
 
-            if (this.list.Id === 0
-                && (this.issue.Amount === null || isUndefined(this.issue.Amount) || this.issue.Amount === 0)) {
-                this.issue.Amount = 1;
-            } else {
+            if (this.list.Id !== 0) {
                 this.issue.Lists = [];
                 this.issue.Lists.push(this.list);
             }

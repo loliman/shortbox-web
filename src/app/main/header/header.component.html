@@ -21,7 +21,11 @@
     <div class="collapse navbar-collapse" id="header">
         <div class="navbar-brand">Shortbox</div>
 
-        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <ul *ngIf="lists != null && lists.length == 0" class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-link">Du hast noch keine Listen...</li>
+        </ul>
+
+        <ul *ngIf="lists != null && lists.length > 0" class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li *ngFor="let l of lists"
                 class="nav-link"
                 (click)="navigate(l)"
@@ -88,6 +92,9 @@
                 menu
             </button>
             <div class="dropdown-menu" style="margin-left: -120px;max-width: 150px;overflow: hidden;" aria-labelledby="dropdownMenuButton">
+                <button (click)="navigateToArchive()" class="btn-sm dropdown-item">
+                    Archiv
+                </button>
                 <button (click)="metaList(0)" class="btn-sm dropdown-item">
                     Serien
                 </button>
