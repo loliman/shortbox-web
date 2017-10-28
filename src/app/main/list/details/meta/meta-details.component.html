@@ -22,6 +22,9 @@
 
                     <app-inline *ngIf="isSeries()" [value]="series.Issuecount" [label]="'Anzahl Ausgaben'" (updated)="series.Issuecount = $event; update()"
                                 type="number"></app-inline>
+
+                    <app-inline *ngIf="isSeries()" [value]="series.Original" [label]="'Originalserie'" (updated)="series.Original = $event; update()"
+                                type="number"></app-inline>
                 </div>
             </div>
         </div>
