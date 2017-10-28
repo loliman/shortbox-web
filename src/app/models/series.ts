@@ -7,5 +7,6 @@ export class Series {
     Endyear: number;
     Volume: number;
     Issuecount: number;
+    Original: number;
     Publisher: Publisher = new Publisher;
 }

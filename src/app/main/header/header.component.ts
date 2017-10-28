@@ -67,8 +67,6 @@ export class HeaderComponent implements OnInit, OnChanges {
 
         this.listService.getLists().subscribe(
             response => {
-                console.log(response);
-
                 if (response.Type === "success") {
                     this.lists = response.Payload;
 
@@ -569,29 +567,30 @@ export class HeaderComponent implements OnInit, OnChanges {
         socket.subscribe(response => {
             response = JSON.parse(response);
 
-            if (response.Type === "success") {
-                if (response.Payload.Type) {
-                    this.currentImport = response.Payload;
-                } else if (!response.Payload.Type && response.Payload.indexOf('Hello there!') === 0) {
+            if (response.Type === "INFO") {
+                if(!response.Payload.Type && response.Payload.indexOf('Hello there!') === 0) {
                     socket.next("Go!");
                 } else {
-                    this.importing = false;
-                    this.currentImport = null;
-                    socket.unsubscribe();
-                    if (response.Payload !== '') {
-                        const a = document.createElement('a');
-                        document.body.appendChild(a);
-                        a.setAttribute('style', 'display: none');
+                    this.currentImport = response.Payload;
+                }
+            } else if (response.Type === "success") {
+                console.log(response);
+                this.importing = false;
+                this.currentImport = null;
+                socket.unsubscribe();
+                if (response.Payload.Payload !== '') {
+                    const a = document.createElement('a');
+                    document.body.appendChild(a);
+                    a.setAttribute('style', 'display: none');
 
-                        const blob = new Blob([response.Payload], {type: 'text/csv'});
-                        const url = window.URL.createObjectURL(blob);
-                        const filename = 'originalissue_import_errors.csv';
+                    const blob = new Blob([response.Payload.Payload], {type: 'text/csv'});
+                    const url = window.URL.createObjectURL(blob);
+                    const filename = 'originalissue_import_errors.csv';
 
-                        a.href = url;
-                        a.download = filename;
-                        a.click();
-                        window.URL.revokeObjectURL(url);
-                    }
+                    a.href = url;
+                    a.download = filename;
+                    a.click();
+                    window.URL.revokeObjectURL(url);
                 }
             } else {
                 let alert: Alert = new Alert();
