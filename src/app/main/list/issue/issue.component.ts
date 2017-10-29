@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
 import {NgbModal, NgbModalOptions} from '@ng-bootstrap/ng-bootstrap';
 import {List} from '../../../models/list';
 import {ListService} from '../../list.service';
@@ -10,13 +10,14 @@ import {Router} from "@angular/router";
 import {Message} from "../../../models/message";
 import {isUndefined} from "util";
 import {Alert} from "../../../models/alert";
+import {Search} from "../../../models/search";
 
 @Component({
     selector: 'app-issue-list',
     templateUrl: './issue.component.html',
     styleUrls: ['./issue.component.css']
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit, OnChanges {
     @Input()
     public list: List;
 
@@ -41,6 +42,8 @@ export class ListComponent implements OnInit {
 
     public working = false;
     public currentWork: Message = new Message();
+
+    public selectedAll: boolean = false;
 
     constructor(private modalService: NgbModal,
                 private listService: ListService,
@@ -76,6 +79,40 @@ export class ListComponent implements OnInit {
         this._mouseLeaveStream.subscribe(() => {
             this.zoomedCoverUrl = '';
         });
+    }
+
+    ngOnChanges() {
+        if (this.selectedAll) {
+            this.selectedAll = false;
+
+            this.selectedIssues = [];
+            this.addToSelectedMulti(0);
+        }
+    }
+
+    addToSelectedMulti(idx: number) {
+        if(isUndefined(this.list.Objects[idx])) {
+            this.working = false;
+            return;
+        }
+
+        if(!this.list.Objects[idx].Header) {
+            this.detailsService.getDetails(this.list.Objects[idx]).subscribe(
+                response => {
+                    if (response.Type === "success") {
+                        this.selectedIssues.push(response.Payload);
+                        this.addToSelectedMulti(idx+1);
+                    } else {
+                        let alert: Alert = new Alert();
+                        alert.type = response.Type;
+                        alert.message = response.Message;
+                        this.onAlert.emit(alert);
+                    }
+                }
+            );
+        } else {
+            this.addToSelectedMulti(idx+1);
+        }
     }
 
     openDelete(content, i: Issue) {
@@ -223,25 +260,29 @@ export class ListComponent implements OnInit {
 
     openDetails(i: Issue, event) {
         if(event.ctrlKey || event.metaKey) {
-            if(this.indexInSelectedIssues(i) == -1) {
-                this.detailsService.getDetails(i).subscribe(
-                    response => {
-                        if (response.Type === "success") {
-                            this.selectedIssues.push(response.Payload)
-                        } else {
-                            let alert: Alert = new Alert();
-                            alert.type = response.Type;
-                            alert.message = response.Message;
-                            this.onAlert.emit(alert);
-                        }
-                    }
-                );
-            } else {
-                this.selectedIssues.splice(this.indexInSelectedIssues(i),this.indexInSelectedIssues(i)+1);
-            }
+            this.addToSelected(i);
         } else {
             this.selectedIssue = i;
             this.details.open(i, this.list.Search.OrgIssue)
+        }
+    }
+
+    addToSelected(i: Issue) {
+        if(this.indexInSelectedIssues(i) == -1) {
+            this.detailsService.getDetails(i).subscribe(
+                response => {
+                    if (response.Type === "success") {
+                        this.selectedIssues.push(response.Payload)
+                    } else {
+                        let alert: Alert = new Alert();
+                        alert.type = response.Type;
+                        alert.message = response.Message;
+                        this.onAlert.emit(alert);
+                    }
+                }
+            );
+        } else {
+            this.selectedIssues.splice(this.indexInSelectedIssues(i),this.indexInSelectedIssues(i)+1);
         }
     }
 
@@ -351,6 +392,18 @@ export class ListComponent implements OnInit {
         }
 
         return title;
+    }
+
+    selectAll() {
+        this.selectedAll = true;
+        this.working = true;
+        this.currentWork = new Message();
+        this.currentWork.Type = "SelectAll";
+
+        const search = new Search(this.list.Search);
+        search.Start = 0;
+        search.Offset = this.list.Amount;
+        this.list.Search = search;
     }
 
     showMoveToDropdown(idx) {
