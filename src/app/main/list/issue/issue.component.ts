@@ -38,7 +38,7 @@ export class ListComponent implements OnInit, OnChanges {
 
     private _mouseEnterStream: EventEmitter<any> = new EventEmitter();
     private _mouseLeaveStream: EventEmitter<any> = new EventEmitter();
-    private zoomedCoverUrl = '';
+    public zoomedCoverUrl = '';
 
     public working = false;
     public currentWork: Message = new Message();

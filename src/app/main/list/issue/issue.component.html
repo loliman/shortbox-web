@@ -47,7 +47,7 @@
             </button>
             <div class="dropdown-menu" style="width: 12rem; overflow: hidden" aria-labelledby="dropdownMenuButton">
                 <ng-container *ngFor="let l of lists">
-                    <li title="{{l.Name}}" (click)="addTo(l, i)" *ngIf="l.Id != -1 && l.Id != list.Id" class="btn-sm dropdown-item">
+                    <li title="{{l.Name}}" (click)="addTo(l, null)" *ngIf="l.Id != -1 && l.Id != list.Id" class="btn-sm dropdown-item">
                         {{l.Name}}
                     </li>
                 </ng-container>
@@ -57,19 +57,19 @@
         <div  class="btn-sm" style="float: right;"></div>
 
         <button *ngIf="!list.Search.OrgIssue" class="btn btn-outline-secondary material-icons"
-                (click)="openDelete(delete, i)"
+                (click)="openDelete(delete, null)"
                 style="float: right">close
         </button>
 
-        <div  class="btn-sm" style="float: right;"></div>
+        <div  class="btn-lg" style="float: right;"></div>
+        <div  class="btn-lg" style="float: right;"></div>
 
         <button *ngIf="!list.Search.OrgIssue" class="btn btn-outline-secondary"
                 (click)="selectAll()"
                 style="float: right">Alle markieren
         </button>
 
-        <div  class="btn-lg" style="float: right;"></div>
-        <div  class="btn-lg" style="float: right;"></div>
+        <div  class="btn-sm" style="float: right;"></div>
 
         <button class="btn btn-outline-secondary material-icons"
                 (click)="resetMultiSelect()"
@@ -119,7 +119,7 @@
                 </button>
                 <ul class="dropdown-menu" style="overflow: hidden; width: 12rem;">
                     <ng-container *ngFor="let l of lists">
-                        <li title="{{l.Name}}" (click)="move(l, i)" *ngIf="l.Id != -1 && l.Id != list.Id" class="btn-sm dropdown-item">
+                        <li title="{{l.Name}}" (click)="addTo(l, i)" *ngIf="l.Id != -1 && l.Id != list.Id" class="btn-sm dropdown-item">
                             {{l.Name}}
                         </li>
                     </ng-container>
