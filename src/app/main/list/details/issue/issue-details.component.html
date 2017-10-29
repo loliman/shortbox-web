@@ -104,7 +104,7 @@
 
             <div *ngIf="isOriginalIssueView">
                 <ng-container *ngFor="let s of issue.Stories">
-                    <div class="card" *ngIf="s.Issues && s.Issues.length > 0" style="padding: 15px; margin-bottom: 10px;">
+                    <div class="card" style="padding: 15px; margin-bottom: 10px;">
                         <div class="card-block">
                             <h4 class="card-title">
                                 <span *ngIf="s.Number != 0" style="float: left;">{{romanize(s.Number)}}.</span>
