@@ -7,6 +7,7 @@
             <div class="green ball"></div>
         </div>
         <div class="wrapper spacer-5">
+            <span *ngIf="currentWork && currentWork.Type == 'SelectAll'" style="color: white;">Markiere alle Comics...</span>
             <span *ngIf="currentWork && currentWork.Type == 'Delete'" style="color: white;">Lösche {{currentWork.Message}} ({{currentWork.Number}} von {{currentWork.Amount}})</span>
             <span *ngIf="currentWork && currentWork.Type == 'Update'" style="color: white;">Aktualisiere {{currentWork.Message}} ({{currentWork.Number}} von {{currentWork.Amount}})</span>
             <span *ngIf="currentWork && currentWork.Type == 'Addto'" style="color: white;">Verschiebe {{currentWork.Message}} ({{currentWork.Number}} von {{currentWork.Amount}})</span>
@@ -58,6 +59,13 @@
         <button *ngIf="!list.Search.OrgIssue" class="btn btn-outline-secondary material-icons"
                 (click)="openDelete(delete, i)"
                 style="float: right">close
+        </button>
+
+        <div  class="btn-sm" style="float: right;"></div>
+
+        <button *ngIf="!list.Search.OrgIssue" class="btn btn-outline-secondary"
+                (click)="selectAll()"
+                style="float: right">Alle markieren
         </button>
 
         <div  class="btn-lg" style="float: right;"></div>

@@ -7,7 +7,7 @@ export class List {
     Sort: number;
     GroupBy: string;
     Amount: number;
-    Objects: Object[];
+    Objects: any[];
     Search: Search;
 
     constructor() {
