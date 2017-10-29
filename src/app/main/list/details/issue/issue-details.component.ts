@@ -101,9 +101,7 @@ export class DetailsComponent {
         this.issue.Originalissue = (this.issue.Originalissue ? 1 : 0);
 
         for (let i = 0; i < this.issue.Stories.length; i++) {
-            if (this.storyPublisher.Publisher.Name === '') {
-                this.issue.Stories[i].OriginalIssue.Series.Publisher.Name = 'Original Publisher';
-            } else {
+            if (this.issue.Stories[i].OriginalIssue.Series.Publisher.Name == '') {
                 this.issue.Stories[i].OriginalIssue.Series.Publisher.Name = this.storyPublisher.Publisher.Name;
             }
         }
@@ -127,9 +125,11 @@ export class DetailsComponent {
 
     updateStorypublisher(publisher) {
         for (let i = 0; i < this.issue.Stories.length; i++) {
-            this.issue.Stories[i].OriginalIssue.Series.Id = -1;
-            this.issue.Stories[i].OriginalIssue.Series.Publisher.Id = 0;
-            this.issue.Stories[i].OriginalIssue.Series.Publisher.Name = publisher.Publisher.Name;
+            if (this.issue.Stories[i].OriginalIssue.Series.Publisher.Name == '') {
+                this.issue.Stories[i].OriginalIssue.Series.Id = -1;
+                this.issue.Stories[i].OriginalIssue.Series.Publisher.Id = 0;
+                this.issue.Stories[i].OriginalIssue.Series.Publisher.Name = publisher.Publisher.Name;
+            }
         }
     }
 
