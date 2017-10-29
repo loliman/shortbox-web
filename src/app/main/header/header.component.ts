@@ -138,12 +138,7 @@ export class HeaderComponent implements OnInit, OnChanges {
             const cover = this.list.Search.Cover;
             const orgIssueS = this.list.Search.OrgIssueS;
 
-            if (this.list.Search.GOne.startsWith('!')) {
-                this.list.Search = this.search;
-                this.list.Search.GOne = 's.title';
-            } else {
-                this.list.Search = this.search;
-            }
+            this.list.Search = this.search;
 
             this.list.Search.Cover = cover;
             this.list.Search.Lists = lists;
@@ -187,6 +182,10 @@ export class HeaderComponent implements OnInit, OnChanges {
             tlist.Search = list.Search;
             tlist.Type = list.Type;
 
+            if (this.list.Search.GOne.startsWith('!')) {
+                this.list.Search.GOne = 's.title';
+            }
+
             this.listService.getList(tlist).subscribe(
                 response => {
                     if (response.Type === "success") {
@@ -202,6 +201,7 @@ export class HeaderComponent implements OnInit, OnChanges {
                             this.list.Objects = this.list.Objects.concat(response.Payload.Objects);
                         }
 
+                        this.search.OrgIssue = this.list.Search.OrgIssue;
                         this.search.Lists = this.list.Search.Lists;
                         this.list.Search = this.search;
 
@@ -574,7 +574,6 @@ export class HeaderComponent implements OnInit, OnChanges {
                     this.currentImport = response.Payload;
                 }
             } else if (response.Type === "success") {
-                console.log(response);
                 this.importing = false;
                 this.currentImport = null;
                 socket.unsubscribe();
