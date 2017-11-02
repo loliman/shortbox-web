@@ -439,4 +439,16 @@ export class ListComponent implements OnInit, OnChanges {
         }
         return Array(+digits.join('') + 1).join('M') + roman;
     }
+
+    stringToNumber(n: string) {
+        return parseInt(n.replace(/[^0-9]+/ig,""));
+    }
+
+    checkIfComplete(idx: number) {
+        while(!this.list.Objects[idx].Header) {
+            idx--;
+        }
+
+        return  this.list.Objects[idx].Amount == this.list.Objects[idx+1].Series.Issuecount;
+    }
 }
