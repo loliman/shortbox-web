@@ -94,13 +94,22 @@
     <!-- a little hacky but we need it for the right idx of dropdown -->
     <div *ngIf="i.Header" class="dropdown-menu" style="display: none"></div>
 
+    <div [class.empty-card]="list.Search.Cover"
+         [class.float-left]="list.Search.Cover"
+         *ngIf="list.Search.GOne.startsWith('s.') && (
+               ((!i.Header && !list.Objects[idx-1].Header) && stringToNumber(i.Number)-stringToNumber(list.Objects[idx-1].Number) > 1)
+            || ((!i.Header && list.Objects[idx-1].Header) && stringToNumber(i.Number) > 1)
+            )">
+        <h5 style="padding: 7px">[...]</h5>
+    </div>
+
     <!--
         COVER VIEW
     -->
     <div *ngIf="!i.Header && list.Search.Cover"
          [class.border-dark]="!i.Format.includes('Variant')"
          [class.border-success]="i.Format.includes('Variant')"
-         [class.float-left]="list.Objects[idx+1] && !list.Objects[idx+1].Header"
+         [class.float-left]="(list.Objects[idx+1] && !list.Objects[idx+1].Header) || !checkIfComplete(idx)"
          [class.selected]="selectedIssue && i.Id == selectedIssue.Id && selectedIssues.length == 0"
          [class.multi-selected]="selectedIssues.length != 0 && indexInSelectedIssues(i) != -1"
          class="card details"
@@ -182,6 +191,16 @@
                 {{i.Price.Price | currency:i.Price.Currency:true:'1.2-2'}}
             </span>
         </div>
+    </div>
+
+    <div [class.empty-card]="list.Search.Cover"
+         [class.float-left]="list.Search.Cover && (list.Objects[idx+1] && !list.Objects[idx+1].Header)"
+        *ngIf="list.Search.GOne.startsWith('s.') && (
+               (list.Objects.length == idx+1 && stringToNumber(i.Number) < i.Series.Issuecount)
+            || (list.Objects.length > idx+1 && list.Objects[idx+1].Header && stringToNumber(i.Number) < i.Series.Issuecount)
+            )
+            && !checkIfComplete(idx)">
+        <h5 style="padding: 7px">[...]</h5>
     </div>
 </ng-container>
 
