@@ -39,7 +39,6 @@ export class CreateComponent implements OnInit {
 
     public issue = new Issue();
     private error: string;
-    public importUrl = '';
 
     currencies: string[];
 
@@ -49,6 +48,7 @@ export class CreateComponent implements OnInit {
 
     public storyPublisher: Publisher;
 
+    public importUrl = '';
     public importing = false;
 
     constructor(private service: CreateService,

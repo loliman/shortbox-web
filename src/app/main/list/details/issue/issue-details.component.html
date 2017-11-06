@@ -102,6 +102,19 @@
                 </div>
             </div>
 
+            <div *ngIf="!isOriginalIssueView">
+                <br>
+                <br>
+
+                <div class="text-nowrap">
+                    <div *ngIf="!multiedit" class="input-group float-left" style="width: 100%; padding-top: 25px;">
+                        <input class="form-control mr-sm-2" placeholder="Import-URL" [(ngModel)]="importUrl">
+                        <button class="input-group-addon" (click)="import()" style="margin-left: -8px" type="text">Importieren
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <div *ngIf="isOriginalIssueView">
                 <ng-container *ngFor="let s of issue.Stories">
                     <div class="card" style="padding: 15px; margin-bottom: 10px;">
