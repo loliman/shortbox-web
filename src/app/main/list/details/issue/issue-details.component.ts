@@ -205,9 +205,6 @@ export class DetailsComponent {
                     alert.message = response.Message;
                     this.onAlert.emit(alert);
                 }
-            },
-            error => {
-                this.loading = false;
             }
         )
     }
