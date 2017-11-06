@@ -197,7 +197,6 @@ export class DetailsComponent {
                     this.issue.Releasedate.year = +date[0];
                     this.issue.Releasedate.month = +date[1];
                     this.issue.Releasedate.day = +date[2];
-                    this.update();
                     this.loading = false;
                 } else {
                     let alert: Alert = new Alert();
