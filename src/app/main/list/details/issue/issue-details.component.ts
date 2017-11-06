@@ -6,6 +6,7 @@ import {Story} from '../../../../models/story';
 import {Series} from '../../../../models/series';
 import {MetaService} from '../../meta.service';
 import {Alert} from "../../../../models/alert";
+import {CreateService} from "../../../footer/create/create.service";
 
 @Component({
     selector: 'app-issue-details',
@@ -33,9 +34,12 @@ export class DetailsComponent {
     public storyPublisher: Series;
     public loading = true;
 
+    public importUrl = '';
+
     constructor(private detailsService: DetailsService,
                 private modalService: NgbModal,
-                private metaService: MetaService) {
+                private metaService: MetaService,
+                private service: CreateService) {
         this.formats = metaService.formats;
         this.languages = metaService.languages;
         this.qualities = metaService.qualities;
@@ -180,6 +184,31 @@ export class DetailsComponent {
         }
 
         return title;
+    }
+
+    import() {
+        this.loading = true;
+        this.service.import(this.importUrl).subscribe(
+            response => {
+                if(response.Type === "success") {
+                    this.issue = response.Payload;
+                    const date = this.issue.Releasedate.split('-');
+                    this.issue.Releasedate = {};
+                    this.issue.Releasedate.year = +date[0];
+                    this.issue.Releasedate.month = +date[1];
+                    this.issue.Releasedate.day = +date[2];
+                    this.loading = false;
+                } else {
+                    let alert: Alert = new Alert();
+                    alert.type = response.Type;
+                    alert.message = response.Message;
+                    this.onAlert.emit(alert);
+                }
+            },
+            error => {
+                this.loading = false;
+            }
+        )
     }
 
     romanize(num) {
