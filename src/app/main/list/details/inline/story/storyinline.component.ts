@@ -71,7 +71,7 @@ export class StoryinlineComponent implements OnInit {
             this.story.OriginalIssue.Title = this.story.OriginalIssue.Series.Title;
             this.story.OriginalIssue.Originalissue = 1;
             this.story.OriginalIssue.Releasedate = this.story.OriginalIssue.Series.Startyear + '-00-00';
-            this.story.OriginalIssue.Format = 'Heft';
+            this.story.OriginalIssue.Format.Format = 'Heft';
             this.story.OriginalIssue.Price.Currency = 'USD';
 
             this.edit = false;

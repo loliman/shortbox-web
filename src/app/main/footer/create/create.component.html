@@ -83,10 +83,14 @@
                         <div class="col-3">
                             <label for="format">Format</label>
                         </div>
-                        <div class="col-6">
-                            <select id="format" class="form-control" class="form-control" [(ngModel)]="issue.Format">
+                        <div [class.col-6]="!issue.Format.Format || issue.Format.Format.indexOf('Variant') == -1"
+                             [class.col-4]="issue.Format.Format && issue.Format.Format.indexOf('Variant') != -1">
+                            <select id="format" class="form-control" class="form-control" [(ngModel)]="issue.Format.Format">
                                 <option *ngFor="let f of formats">{{f}}</option>
                             </select>
+                        </div>
+                        <div *ngIf="issue.Format.Format && issue.Format.Format.indexOf('Variant') != -1" class="col-2">
+                            <input id="variant" class="form-control" [(ngModel)]="issue.Format.Variant"/>
                         </div>
                     </div>
                 </div>

@@ -27,6 +27,7 @@ import {AuthService} from './auth/auth.service';
 import {MetaDetailsComponent} from './main/list/details/meta/meta-details.component';
 import {MetaService} from './main/list/meta.service';
 import {PriceComponent} from './main/list/details/inline/price/priceinline.component';
+import { FormatComponent } from './main/list/details/inline/format/formatinline.component';
 
 const routes: Routes = [
     {path: 'login', component: AuthComponent},
@@ -51,7 +52,8 @@ const routes: Routes = [
         MetaComponent,
         MetainlineComponent,
         MetaDetailsComponent,
-        PriceComponent
+        PriceComponent,
+        FormatComponent
     ],
     imports: [
         BrowserModule,

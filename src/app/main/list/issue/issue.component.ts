@@ -320,9 +320,15 @@ export class ListComponent implements OnInit, OnChanges {
                 }
             }
 
-            if(e.Format !== null && !isUndefined(e.Format) && e.Format !== '') {
-                this.selectedIssues[i].Format = e.Format;
+            if(e.Format != null && !isUndefined(e.Format)) {
+                if (e.Format.Format !== null && !isUndefined(e.Format.Format) && e.Format.Format !== '') {
+                    this.selectedIssues[i].Format.Format = e.Format.Format;
+                }
+                if (e.Format.Variant !== null && !isUndefined(e.Format.Variant) && e.Format.Variant !== '') {
+                    this.selectedIssues[i].Format.Variant = e.Format.Variant;
+                }
             }
+
             if(e.Language !== null && !isUndefined(e.Language) && e.Language !== '') {
                 this.selectedIssues[i].Language = e.Language;
             }
@@ -385,7 +391,14 @@ export class ListComponent implements OnInit, OnChanges {
     }
 
     getTitle(i: Issue) {
-        let title = i.Series.Title + ' (' + this.romanize(i.Series.Volume) + ') (' + i.Series.Startyear + ') #' + i.Number;
+        let title = i.Series.Title
+            + ' (' + this.romanize(i.Series.Volume) + ')'
+            + ' (' + i.Series.Startyear + ') #'
+            + i.Number;
+
+        if (i.Format.Variant && !this.list.Search.OrgIssue) {
+            title += ' (Variant Cover ' + i.Format.Variant + ')';
+        }
 
         if (i.Title && !this.list.Search.OrgIssue) {
             title += ' (' + i.Title + ')';

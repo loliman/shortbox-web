@@ -26,7 +26,6 @@ export class DetailsComponent {
 
     public issue: Issue;
 
-    public formats: string[];
     public languages: string[];
     public qualities: string[];
 
@@ -36,7 +35,6 @@ export class DetailsComponent {
     constructor(private detailsService: DetailsService,
                 private modalService: NgbModal,
                 private metaService: MetaService) {
-        this.formats = metaService.formats;
         this.languages = metaService.languages;
         this.qualities = metaService.qualities;
         this.storyPublisher = new Series();
@@ -177,6 +175,10 @@ export class DetailsComponent {
 
     getTitle(i: Issue) {
         let title = i.Series.Title + ' (' + this.romanize(i.Series.Volume) + ') (' + i.Series.Startyear + ') #' + i.Number;
+
+        if (i.Format.Variant) {
+            title += ' (Variant Cover ' + i.Format.Variant + ')';
+        }
 
         if (i.Title && !this.isOriginalIssueView) {
             title += ' (' + i.Title + ')';

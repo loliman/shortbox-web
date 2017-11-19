@@ -107,8 +107,8 @@
         COVER VIEW
     -->
     <div *ngIf="!i.Header && list.Search.Cover"
-         [class.border-dark]="!i.Format.includes('Variant')"
-         [class.border-success]="i.Format.includes('Variant')"
+         [class.border-dark]="!i.Format.Variant"
+         [class.border-success]="i.Format.Variant"
          [class.float-left]="(list.Objects[idx+1] && !list.Objects[idx+1].Header) || !checkIfComplete(idx)"
          [class.selected]="selectedIssue && i.Id == selectedIssue.Id && selectedIssues.length == 0"
          [class.multi-selected]="selectedIssues.length != 0 && indexInSelectedIssues(i) != -1"
@@ -159,8 +159,8 @@
         NORMAL VIEW
     -->
     <div *ngIf="!i.Header && !list.Search.Cover"
-         [class.bg-success]="i.Format.includes('Variant')"
-         [class.bg-primary]="!i.Format.includes('Variant')"
+         [class.bg-success]="i.Format.Variant"
+         [class.bg-primary]="!i.Format.Variant"
          [class.selected]="selectedIssue && i.Id == selectedIssue.Id && selectedIssues.length == 0"
          [class.multi-selected]="selectedIssues.length != 0 && indexInSelectedIssues(i) != -1"
          class="card border-dark text-white details"
