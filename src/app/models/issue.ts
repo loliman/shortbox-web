@@ -2,6 +2,7 @@ import {Story} from './story';
 import {Series} from './series';
 import {List} from './list';
 import {Price} from 'app/models/price';
+import {Format} from "./format";
 
 export class Issue {
     Id: number;
@@ -10,7 +11,7 @@ export class Issue {
     Number: string;
     Stories: Story[];
     Lists: List[] = [];
-    Format: string;
+    Format: Format;
     Language: string;
     Pages: number;
     Releasedate: any = '0000-00-00';
@@ -24,6 +25,7 @@ export class Issue {
 
     constructor() {
         this.Stories = [];
+        this.Format = new Format();
         this.Price = new Price();
     }
 }

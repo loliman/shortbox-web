@@ -12,6 +12,7 @@ import {AutocompleteService} from '../../autocomplete.service';
 import {MetaService} from '../../list/meta.service';
 import {isUndefined} from "util";
 import {Series} from "../../../models/series";
+import {Format} from "../../../models/format";
 
 @Component({
     selector: 'app-search',
@@ -33,7 +34,7 @@ export class SearchComponent implements OnInit {
 
     constructor(private acService: AutocompleteService,
                 private metaService: MetaService) {
-        this.formats = metaService.formats;
+        this.formats = new Format().FORMATS;
         this.languages = metaService.languages;
         this.qualities = metaService.qualities;
     }

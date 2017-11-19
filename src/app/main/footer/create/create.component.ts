@@ -17,6 +17,7 @@ import {MetaService} from '../../list/meta.service';
 import {Price} from '../../../models/price';
 import {isUndefined} from "util";
 import {Alert} from "../../../models/alert";
+import {Format} from "../../../models/format";
 
 
 @Component({
@@ -54,7 +55,7 @@ export class CreateComponent implements OnInit {
     constructor(private service: CreateService,
                 private acService: AutocompleteService,
                 private metaService: MetaService) {
-        this.formats = metaService.formats;
+        this.formats = new Format().FORMATS;
         this.languages = metaService.languages;
         this.qualities = metaService.qualities;
         this.storyPublisher = new Publisher();
@@ -182,7 +183,7 @@ export class CreateComponent implements OnInit {
                 this.issue.Stories[i].OriginalIssue.Series = s;
                 this.issue.Stories[i].OriginalIssue.Originalissue = 1;
                 this.issue.Stories[i].OriginalIssue.Releasedate = this.issue.Stories[i].OriginalIssue.Series.Startyear + '-00-00';
-                this.issue.Stories[i].OriginalIssue.Format = 'Heft';
+                this.issue.Stories[i].OriginalIssue.Format.Format = 'Heft';
                 this.issue.Stories[i].OriginalIssue.Price.Currency = 'USD';
             }
 

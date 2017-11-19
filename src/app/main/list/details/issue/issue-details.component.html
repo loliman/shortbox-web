@@ -49,8 +49,7 @@
                                     type="series"></app-metainline>
                     <app-inline [value]="issue.Number" [label]="'Nummer'" (updated)="issue.Number = $event;update()"
                                 type="text"></app-inline>
-                    <app-inline [value]="issue.Format" [options]="formats" [label]="'Format'"
-                                (updated)="issue.Format = $event; update()" type="select"></app-inline>
+                    <app-formatinline [value]="issue.Format" (updated)="issue.Format = $event; update()"></app-formatinline>
                     <app-inline [value]="issue.Language" [options]="languages" [label]="'Sprache'"
                                 (updated)="issue.Language = $event; update()" type="select"></app-inline>
                     <app-inline [value]="issue.Pages" [label]="'Seiten'" (updated)="issue.Pages = $event; update()"
@@ -120,8 +119,10 @@
                                             class="material-icons">search</i></button>
                                     <span>&nbsp;</span>
 
-                                    <div class="row form-group no-gutters" style="margin-bottom: 0;">
-                                        <div class="col-6 input-group">
+                                    <div class="row form-group no-gutters"
+                                         [class.bg-success]="i.Variant"
+                                         style="margin-bottom: 0;">
+                                        <div class="col-4 input-group">
                                             <input class="form-control" [type]="text" [(ngModel)]="i.Series.Title"
                                                    [disabled]="true">
                                         </div>
@@ -135,6 +136,10 @@
                                         </div>
                                         <div class="col-2 input-group">
                                             <input class="form-control" [type]="number" [(ngModel)]="i.Number"
+                                                   [disabled]="true">
+                                        </div>
+                                        <div class="col-2 input-group">
+                                            <input class="form-control" [type]="text" [(ngModel)]="i.Format.Variant"
                                                    [disabled]="true">
                                         </div>
                                     </div>

@@ -1,0 +1,27 @@
+<div class="row form-group">
+  <div class="col-3">
+    <label>Format</label>
+  </div>
+
+  <div [class.col-6]="!value.Format || value.Format.indexOf('Variant') == -1"
+       [class.col-4]="value.Format && value.Format.indexOf('Variant') != -1"
+        class="input-group">
+    <input id="format" class="form-control" *ngIf="!edit" [(ngModel)]="value.Format" disabled>
+    <select id="format" class="form-control" *ngIf="edit" [(ngModel)]="value.Format">
+      <option *ngFor="let o of formats" [value]="o">{{o}}</option>
+    </select>
+  </div>
+
+  <div *ngIf="value.Format && value.Format.indexOf('Variant') != -1" class="col-2 input-group">
+      <input id="variant" class="form-control" [(ngModel)]="value.Variant" [disabled]="!edit"/>
+  </div>
+
+  <div class="col text-nowrap" [class.noMargin]="!label">
+      <button *ngIf="!edit" id="edit" (click)="toogle()" class="btn btn-sm btn-outline-info"><i
+              class="material-icons">edit</i></button>
+      <button *ngIf="edit" id="ok" (click)="save()" class="btn btn-sm btn-outline-success"><i class="material-icons">done</i>
+      </button>
+      <button *ngIf="edit" id="cancel" (click)="reset()" class="btn btn-sm btn-outline-danger"><i
+              class="material-icons">clear</i></button>
+  </div>
+</div>

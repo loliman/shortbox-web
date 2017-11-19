@@ -11,7 +11,6 @@ import {Response} from "../../models/response";
 export class MetaService {
     private options: RequestOptions;
 
-    public formats: string[];
     public languages: string[];
     public qualities: string[];
 
@@ -19,16 +18,6 @@ export class MetaService {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         this.options = new RequestOptions({headers: headers});
-
-        this.formats = [];
-        this.formats.push('Heft');
-        this.formats.push('Heft/Variant');
-        this.formats.push('Softcover');
-        this.formats.push('Softcover/Variant');
-        this.formats.push('Hardcover');
-        this.formats.push('Hardcover/Variant');
-        this.formats.push('Manga');
-        this.formats.push('Album');
 
         this.languages = [];
         this.languages.push('Deutsch');
