@@ -92,7 +92,7 @@ export class ListService {
         req.Payload = list;
 
         return this.http.post(config.url + '/export', JSON.stringify(req), this.options)
-            .map(res => res)
+            .map(res => res.json())
             .catch(res => Observable.throw('error'));
     }
 

@@ -39,7 +39,7 @@ export class FooterComponent {
                 document.body.appendChild(a);
                 a.setAttribute('style', 'display: none');
 
-                const blob = new Blob([response.Payload.text()], {type: 'text/csv'});
+                const blob = new Blob([response.Payload], {type: 'text/csv'});
                 const url = window.URL.createObjectURL(blob);
                 const date = new Date();
                 const filename: string = ((this.list.Name == null || isUndefined(this.list.Name))
