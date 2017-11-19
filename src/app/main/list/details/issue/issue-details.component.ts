@@ -169,7 +169,10 @@ export class DetailsComponent {
             + '#'
             + s.OriginalIssue.Number;
 
-        return (name === s.Title ? 'Untitled' : s.Title);
+        let title = (name === s.Title ? 'Untitled' : s.Title);
+        title += (s.AdditionalInfo == '' ? '' : ' (' + s.AdditionalInfo + ')');
+
+        return title;
     }
 
     getTitle(i: Issue) {
