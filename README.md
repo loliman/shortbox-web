@@ -1,3 +1,5 @@
+DEPRECATED! Current Version (React) is here https://github.com/loliman/shortbox-react
+
 shortbox.de
 ======
 **Shortbox-Web** is meant to be the the webfrontend to shortbox-backend.
